@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Success{% endblock %}
+{% block content %}
+    <body>
+        <h1 class="body-header">Success!</h1>
+        <p class="body-subheader"> You are logged in. </p>
+    </body>
+{% endblock %}
+{% block styles %}
+    {{ super() }}
+        .body-header{
+            color:green;
+        }
+        .body-subheader{
+            color:green;
+        }
+{% endblock %}
