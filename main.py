@@ -16,7 +16,7 @@ from functools import wraps ## For admin_only decorator functions
 from forms import CommentForm, CreatePostForm, LoginUserForm, RegisterUserForm
 from flask_gravatar import Gravatar
 
-
+from datetime import date
 
 app = Flask(__name__)
 
