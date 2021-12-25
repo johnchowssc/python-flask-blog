@@ -1,37 +1,39 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
 {% include "header.html" %}
 
-    <!-- Page Header-->
-    <header class="masthead" style="background-image: url('{{ url_for('static', filename='img/home-bg.jpg')}}">
-        <div class="container position-relative px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-md-10 col-lg-8 col-xl-7">
-                    <div class="site-heading">
-                        <h1>Login</h1>
-                        <span class="subheading">For administration portal</span>
-                    </div>
-                </div>
-            </div>
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('https://images.unsplash.com/photo-1484100356142-db6ab6244067?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="page-heading">
+            <h1>Log In</h1>
+            <span class="subheading">Welcome Back!</span>
+          </div>
         </div>
-    </header>
+      </div>
+    </div>
+  </header>
 
-    <!-- Main Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto content">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+            <p>{{ message }}</p>  
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+      </div>
+    </div>
+  </div>
 
-    <h1>Login</h1>
-    <form method="POST" action="{{ url_for('login') }}" novalidate>
-        {{ form.csrf_token }}
-        <p>
-            {{ form.email.label }} <br> {{ form.email(size=30) }}
-            {% for err in form.email.errors %}
-            <span style="color:red">{{err}}</span>
-            {% endfor %}
-            <br>
-            {{ form.password.label }} <br> {{ form.password(size=30) }}
-            {% for err in form.password.errors %}
-            <span style="color:red">{{err}}</span>
-            {% endfor %}
-            
-        </p>
-        <input type="submit" value="Go!">
-    </form>
 
 {% include "footer.html" %}
+{% endblock %}
