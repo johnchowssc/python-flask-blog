@@ -7,6 +7,7 @@ from flask_ckeditor import CKEditor
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils import database_exists
+import psycopg2
 
 ## Authentication
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
@@ -76,6 +77,7 @@ class Comment(db.Model):
     post = relationship("BlogPost", back_populates="comments")
     body = db.Column(db.Text, nullable=False)
 
+## For Local SQLlite
 if database_exists('sqlite:///blog.db'):
     print("Database exists")
 else:
@@ -93,6 +95,17 @@ else:
         print("Admin user created")
     except:
         print("Unable to create Admin user")
+
+## Run once for Heroku Postgres
+db.create_all()
+admin_user = User(
+        name = os.getenv("ADMIN_USER"),
+        email = os.getenv("ADMIN_EMAIL"),
+        password = generate_password_hash(os.getenv("ADMIN_PASSWORD"))    
+        )
+db.session.add(admin_user)
+db.session.commit()
+print("Admin user created")
 
 ## Admin-only decorator
 def admin_only(function):
