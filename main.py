@@ -18,6 +18,9 @@ from flask_gravatar import Gravatar
 
 from datetime import date
 
+import sys
+import logging
+
 ## Environment variables
 import os
 from dotenv import load_dotenv
@@ -25,6 +28,9 @@ load_dotenv()
 
 ##Initialise Flask
 app = Flask(__name__)
+
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
 
 # Run in terminal to generate secret key
 # python -c 'import secrets; print(secrets.token_hex())'
