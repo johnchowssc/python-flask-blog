@@ -3,10 +3,10 @@ from flask import Flask, render_template, redirect, url_for, flash, abort
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
 
-
 ## Database
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
+from sqlalchemy_utils import database_exists
 
 ## Authentication
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
@@ -18,23 +18,26 @@ from flask_gravatar import Gravatar
 
 from datetime import date
 
+## Environment variables
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+##Initialise Flask
 app = Flask(__name__)
 
 # Run in terminal to generate secret key
 # python -c 'import secrets; print(secrets.token_hex())'
-
-app.config['SECRET_KEY'] = 'f9b8f7ae0b4d1b4c0af071071fabf8cc3ac2364c25b451ecbcc8cf5408d79d1d'
+app.config['SECRET_KEY'] = os.getenv("APP_SECRET_KEY")
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
-##CONNECT TO DB
+##INITIALISE DB
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-
 ##CONFIGURE TABLES
-
 ## User Class
 class User(UserMixin, db.Model):
     __tablename__ = "users"
@@ -66,11 +69,23 @@ class Comment(db.Model):
     post = relationship("BlogPost", back_populates="comments")
     body = db.Column(db.Text, nullable=False)
 
-
-db.create_all()
-
-## Create Database
-db.create_all()
+if database_exists('sqlite:///blog.db'):
+    print("Database exists")
+else:
+    ## Create Database and Admin User
+    db.create_all()
+    print("Database created")
+    try:
+        admin_user = User(
+        name = os.getenv("ADMIN_USER"),
+        email = os.getenv("ADMIN_EMAIL"),
+        password = generate_password_hash(os.getenv("ADMIN_PASSWORD"))    
+        )
+        db.session.add(admin_user)
+        db.session.commit()
+        print("Admin user created")
+    except:
+        print("Unable to create Admin user")
 
 ## Admin-only decorator
 def admin_only(function):
