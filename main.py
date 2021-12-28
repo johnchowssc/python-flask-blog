@@ -1,5 +1,5 @@
 ## Web display
-from flask import Flask, render_template, redirect, url_for, flash, abort
+from flask import Flask, render_template, redirect, url_for, flash, abort, send_from_directory
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
 
@@ -143,6 +143,11 @@ gravatar = Gravatar(app,
                     base_url=None)
 
 ## Routes
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
 @app.route('/')
 def get_all_posts():
     posts = BlogPost.query.all()
