@@ -1,7 +1,6 @@
 Babel==2.9.1
 blinker==1.4
 brotli==1.0.9
-cdecimal==2.3
 colour==0.1.5
 ConfigParser==5.2.0
 cryptography==36.0.1
