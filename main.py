@@ -78,34 +78,36 @@ class Comment(db.Model):
     body = db.Column(db.Text, nullable=False)
 
 ## For Local SQLlite
-if database_exists('sqlite:///blog.db'):
-    print("Database exists")
-else:
-    ## Create Database and Admin User
-    db.create_all()
-    print("Database created")
-    try:
-        admin_user = User(
-        name = os.getenv("ADMIN_USER"),
-        email = os.getenv("ADMIN_EMAIL"),
-        password = generate_password_hash(os.getenv("ADMIN_PASSWORD"))    
-        )
-        db.session.add(admin_user)
-        db.session.commit()
-        print("Admin user created")
-    except:
-        print("Unable to create Admin user")
+# if database_exists('sqlite:///blog.db'):
+#     print("Database exists")
+# else:
+#     ## Create Database and Admin User
+#     db.create_all()
+#     print("Database created")
+#     try:
+#         admin_user = User(
+#         name = os.getenv("ADMIN_USER"),
+#         email = os.getenv("ADMIN_EMAIL"),
+#         password = generate_password_hash(os.getenv("ADMIN_PASSWORD"))    
+#         )
+#         db.session.add(admin_user)
+#         db.session.commit()
+#         print("Admin user created")
+#     except:
+#         print("Unable to create Admin user")
 
 ## Run once for Heroku Postgres
+# db.create_all()
+# admin_user = User(
+#         name = os.getenv("ADMIN_USER"),
+#         email = os.getenv("ADMIN_EMAIL"),
+#         password = generate_password_hash(os.getenv("ADMIN_PASSWORD"))    
+#         )
+# db.session.add(admin_user)
+# db.session.commit()
+# print("Admin user created")
+
 db.create_all()
-admin_user = User(
-        name = os.getenv("ADMIN_USER"),
-        email = os.getenv("ADMIN_EMAIL"),
-        password = generate_password_hash(os.getenv("ADMIN_PASSWORD"))    
-        )
-db.session.add(admin_user)
-db.session.commit()
-print("Admin user created")
 
 ## Admin-only decorator
 def admin_only(function):
