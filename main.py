@@ -27,6 +27,11 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+## Markdown
+import markdown
+
+####################
+
 ##Initialise Flask
 app = Flask(__name__)
 
@@ -279,6 +284,33 @@ def delete_post(post_id):
     db.session.commit()
     return redirect(url_for('get_all_posts'))
 
+@app.route("/addfile/<filename>")
+# @admin_only
+def add_file_post(filename):
+    # print(filename)
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    markdown_filepath = os.path.join(basedir, f"static/{filename}")
+    # print(markdown_filepath)
+    with open(markdown_filepath, "r") as file:
+        md_text=file.read()
+        print(md_text)
+        html = markdown.markdown(md_text)
+        print(html)
+    try: ##TODO Figure out a way to pull out the title etc.
+        new_post = BlogPost(
+            title="Title",
+            subtitle="Subtitle",
+            body=html,
+            img_url="",
+            author=current_user,
+            date=date.today().strftime("%B %d, %Y")
+        )
+        db.session.add(new_post)
+        db.session.commit()
+    except:
+        pass
+    return redirect(url_for("get_all_posts"))
+   
 
 if __name__ == "__main__":
     app.run(debug=True)
