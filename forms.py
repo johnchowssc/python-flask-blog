@@ -11,6 +11,7 @@ class CreatePostForm(FlaskForm):
     img_url = StringField("Blog Image URL", validators=[])
     body = CKEditorField("Blog Content", validators=[DataRequired()])
     submit = SubmitField("Submit Post")
+    
 
 ## WTForm for registering users
 class RegisterUserForm(FlaskForm):
