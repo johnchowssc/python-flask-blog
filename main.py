@@ -38,8 +38,16 @@ app = Flask(__name__)
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
 
+## Setting Environment Variables
 # Run in terminal to generate secret key
 # python -c 'import secrets; print(secrets.token_hex())'
+# You need to create a .env file.
+# Within this, you need to set the environment variable APP_SECRET_KEY to this key before the below will work.
+# Other variables:
+# ADMIN_USER
+# ADMIN_EMAIL
+# ADMIN_PASSWORD
+
 app.config['SECRET_KEY'] = os.getenv("APP_SECRET_KEY")
 ckeditor = CKEditor(app)
 Bootstrap(app)
